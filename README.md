@@ -1,13 +1,23 @@
-# STM32G474RE Nucleo + Zephyr RTOS
+# STM32G474RE Nucleo + Zephyr RTOS — TinyML demo
 
-Reproducible Zephyr west workspace for the STM32G474RE Nucleo-64. VSCode +
-Cortex-Debug + OpenOCD/ST-Link. macOS native toolchain.
+TensorFlow Lite Micro on a Cortex-M4 with no NPU. Built on top of the
+[stm32g474-zephyr-template](https://github.com/hulryung/stm32g474-zephyr-template)
+base setup, with `apps/ai_sine/` as a working TFLM example
+(~46 µs / inference at 170 MHz with CMSIS-NN), a feasibility report at
+`docs/ai-on-g474re.md`, and a roadmap of further TinyML / BMS / sensor
+demos at `docs/roadmap.md`.
 
-This repo is a **template**: it holds only the user-managed pieces of the
-workspace (VSCode configs, `debug.conf` overlay, helper scripts). The Zephyr
-source tree, west modules, SDK, and Python venv are **not committed** — they
-are regenerable from the steps below. This file is the canonical setup guide
-for both humans and AI agents (Claude Code, Cursor, etc.).
+This repo holds only the user-managed pieces of the workspace (apps, VSCode
+configs, `debug.conf`, docs, helper scripts). The Zephyr source tree, west
+modules, SDK, and Python venv are **not committed** — they are regenerable
+from the steps below. This file is the canonical setup guide for both
+humans and AI agents (Claude Code, Cursor, etc.).
+
+> **Looking for the clean starting template (no AI) instead?** Use
+> [stm32g474-zephyr-template](https://github.com/hulryung/stm32g474-zephyr-template).
+> This repo extends it with TinyML — the additions are the `apps/ai_sine/`
+> tree, `docs/`, the `+optional` west group config, and the AI-related
+> entries in `.vscode/`.
 
 ---
 
