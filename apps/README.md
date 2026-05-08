@@ -50,6 +50,10 @@ Per-app debug overlays go in `apps/<app_name>/debug.conf` instead.
 | App              | Purpose                                                   |
 |------------------|-----------------------------------------------------------|
 | `shell_monitor`  | UART shell on LPUART1 (ST-Link VCP) + system monitoring   |
+| `ai_sine`        | TensorFlow Lite Micro int8 MLP that approximates sin(x).  |
+|                  | ~46 µs / inference @ 170 MHz. Demonstrates TinyML on M4   |
+|                  | (no NPU). Requires the optional west group — see          |
+|                  | `apps/ai_sine/README.md` and `docs/ai-on-g474re.md`.      |
 
 ## Why not just modify `samples/basic/blinky`?
 

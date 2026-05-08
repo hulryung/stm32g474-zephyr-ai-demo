@@ -3,6 +3,7 @@
 /modules/
 /bootloader/
 /tools/
+/optional/
 
 # west workspace metadata (regenerable via `west init -l zephyr`)
 /.west/

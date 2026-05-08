@@ -182,11 +182,22 @@ trees.
 
 Bundled apps:
 - **`apps/shell_monitor/`** — UART shell on LPUART1 (ST-Link VCP) with
-  built-in monitoring commands (`kernel threads`, `device list`, `log`, …)
+  built-in monitoring commands (`kernel thread list`, `device list`, …)
   plus a custom `sys info|uptime|led` command tree. LD2 1 Hz heartbeat.
+- **`apps/ai_sine/`** — TensorFlow Lite Micro on Cortex-M4. Int8-quantized
+  MLP approximating `sin(x)`. Measured ~46 µs / inference @ 170 MHz with
+  CMSIS-NN. See `docs/ai-on-g474re.md` for the full feasibility report.
 
-To add a new app, copy `apps/shell_monitor/` and rename. See
-`apps/README.md` for the convention.
+To add a new app, copy an existing one and rename. See `apps/README.md` for
+the convention.
+
+### Documentation
+
+| Path                          | What's in it                              |
+|-------------------------------|-------------------------------------------|
+| `apps/<name>/README.md`       | How to build, flash, and use that app     |
+| `apps/README.md`              | The `apps/` convention itself             |
+| `docs/ai-on-g474re.md`        | TinyML feasibility report with measured numbers |
 
 ### Not in repo (regenerable)
 

@@ -127,6 +127,52 @@
       "problemMatcher": []
     },
     {
+      "label": "Zephyr: Build (ai_sine)",
+      "type": "shell",
+      "command": "west",
+      "args": [
+        "build", "-p", "auto",
+        "-b", "nucleo_g474re",
+        "${workspaceFolder}/apps/ai_sine",
+        "-d", "${workspaceFolder}/build/ai_sine"
+      ],
+      "group": "build",
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "Zephyr: Debug build (ai_sine, -Og)",
+      "type": "shell",
+      "command": "west",
+      "args": [
+        "build", "-p", "always",
+        "-b", "nucleo_g474re",
+        "${workspaceFolder}/apps/ai_sine",
+        "-d", "${workspaceFolder}/build/ai_sine",
+        "--",
+        "-DEXTRA_CONF_FILE=${workspaceFolder}/debug.conf"
+      ],
+      "group": "build",
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "Zephyr: Flash (ai_sine / openocd)",
+      "type": "shell",
+      "command": "west",
+      "args": [
+        "flash", "-r", "openocd",
+        "-d", "${workspaceFolder}/build/ai_sine"
+      ],
+      "dependsOn": "Zephyr: Build (ai_sine)",
+      "problemMatcher": []
+    },
+    {
+      "label": "Zephyr: Clean ai_sine",
+      "type": "shell",
+      "command": "rm",
+      "args": ["-rf", "${workspaceFolder}/build/ai_sine"],
+      "problemMatcher": []
+    },
+    {
       "label": "Zephyr: Clean shell_monitor",
       "type": "shell",
       "command": "rm",
