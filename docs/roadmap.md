@@ -49,6 +49,52 @@ sample). Inference code follows the `ai_sine` pattern.
 
 Educational value: ⭐⭐⭐⭐ (most "real" feeling demo)
 
+### ⚪ `apps/ai_bms` — battery management anomaly detection
+
+Why: STM32G4 is widely used in real BMS designs (EV/ESS/power tools) — its
+multi-channel ADCs, internal op-amps, HRTIM, and FDCAN are why. Autoencoder
+anomaly detection is an unusually good fit for BMS because (a) you have
+massive amounts of normal cycling data and almost no failure data, (b) the
+interesting failure modes are subtle multivariate trends (cell imbalance,
+internal resistance drift, abnormal dT/dt) that hard threshold rules miss,
+(c) it can flag failure modes nobody designed a rule for.
+
+Concept:
+- Simulate a 16-cell pack on-device (synthetic V/T/I waveforms — no real
+  battery needed for the demo).
+- Autoencoder trained on normal charge/discharge cycles (training notebook
+  ships with the app, runs in Python on a desktop).
+- Inference window: ~32 samples × ~30 channels (cell V, cell T, pack I,
+  dV/dt, dT/dt, SOC).
+- Shell:
+  - `bms state` — current cell voltages, temps, current, score
+  - `bms inject cell-imbalance <cell> <delta_v>` — drift one cell
+  - `bms inject thermal <rate>` — accelerate temperature rise
+  - `bms history` — recent scores so the trend is visible
+- Expected demo: normal score ≈ 0.01; injecting any anomaly drives score
+  to ≈ 0.3+ within 1–2 windows.
+
+External HW: **none** for the demo (synthetic pack on-device). Real BMS
+front-end (cell-voltage ADC, current shunt amplifier, thermistor) is a
+follow-on project.
+
+Effort: medium-high. Builds directly on `ai_anomaly` (same pattern, more
+input channels, domain-specific signal generator). Training notebook is
+the bulk of the work — needs realistic synthetic battery dynamics.
+
+Educational value: ⭐⭐⭐⭐⭐ — most "this is a real product" feeling demo.
+Connects the dots between G4's analog/power features and the AI capability
+this template demonstrates.
+
+**Critical caveat documented in the app's README:** ML anomaly detection
+**augments**, never replaces, hard-rule overcurrent/overvoltage/overtemp
+protection. Production BMS architecture is rules-first (UL 1973 / IEC 62619
+certified), with ML running alongside as an early-warning trend detector.
+The demo will model this two-layer architecture explicitly.
+
+Blocked-by: 🔵 `ai_anomaly` should ship first (it teaches the autoencoder
+pattern in isolation; `ai_bms` then specializes it).
+
 ### 🔵 `apps/ai_mnist` — int8 CNN classifier
 
 Why: covers the **CNN/classification** slot. Tests TFLM Conv2D, MaxPool,
@@ -181,13 +227,15 @@ Effort: medium. Driver bring-up is non-trivial.
 If you're an agent (or human) coming back to this list cold:
 
 1. **`apps/button_led`** — fast win, 30 min, fills basic GPIO IRQ pattern
-2. **`apps/ai_anomaly`** — highest TinyML educational value, no HW needed
+2. **`apps/ai_anomaly`** — foundation autoencoder pattern, no HW needed
 3. **`apps/ai_mnist`** — completes CNN coverage, no HW needed
-4. **`apps/ai_gesture`** — best demo, requires accelerometer purchase
-5. **`apps/adc_temp`** — fills ADC pattern, real sensor data
+4. **`apps/ai_bms`** — most "real product" demo, builds on `ai_anomaly`
+5. **`apps/ai_gesture`** — best visual wow, requires accelerometer purchase
+6. **`apps/adc_temp`** — fills ADC pattern, real sensor data
 
-After 1–3: this template covers regression, anomaly, classification, GPIO
-IRQ, shell, monitoring — a solid Zephyr + TinyML reference for STM32G4.
+After 1–4: this template covers regression, anomaly, classification, GPIO
+IRQ, shell, monitoring, **and a domain-specific BMS application** — a
+solid Zephyr + TinyML reference for STM32G4 that goes beyond toy examples.
 
 ---
 
