@@ -22,6 +22,8 @@ priority, not strict dependency.
 | `apps/ai_sine` | TFLM hello-world: int8 MLP regression, ~46 µs/inference | 🟢 |
 | `apps/ai_anomaly` | Autoencoder anomaly detection on synthetic signal, ~130 µs | 🟢 |
 | `apps/ai_bms` | AE on NASA PCoE battery cycle data, generalizes across cells, ~157 µs | 🟢 |
+| `apps/ai_bms_soh` | SOH regression on same NASA data, MAE 0.11 Ah, ~105 µs | 🟢 |
+| `apps/ai_bms_rul` | RUL prognostic on same NASA data, MAE 12 cycles, ~140 µs | 🟢 |
 
 ---
 

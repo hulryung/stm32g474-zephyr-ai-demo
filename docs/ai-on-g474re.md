@@ -231,6 +231,32 @@ is realistic: real degradation is a subtle multivariate trend, not a
 yes/no fault. The score crosses the (advisory) threshold cleanly while
 leaving headroom for tuning.
 
+## 5c. Update — three views of the same battery data (2026-05-09)
+
+`ai_bms`, `ai_bms_soh`, and `ai_bms_rul` together demonstrate that **the
+same NASA PCoE data answers three different operational questions** when
+paired with three different model heads:
+
+| App | Question | Pattern | Inference | Holdout result |
+|-----|----------|---------|-----------|----------------|
+| `ai_bms`     | Is this cycle anomalous? | Autoencoder, unsupervised | 157 µs | 7-9× separation aged vs healthy |
+| `ai_bms_soh` | What's the cell's capacity? | MLP regression, supervised | 105 µs | MAE 0.11 Ah (~5-6%) |
+| `ai_bms_rul` | How many cycles until EOL? | MLP prognostic, supervised | 140 µs | MAE 12 cycles |
+
+This is the practical takeaway for embedded ML on this class of MCU: a
+single dataset can drive multiple BMS functions, each with its own
+~5-10 KB model and ~100-200 µs inference budget. Total combined cost if
+all three ran in parallel: ~30 KB FLASH, ~12 KB RAM, ~400 µs per cycle of
+combined inference — entirely negligible vs the 1 Hz sample rate of a
+real BMS.
+
+The accuracy gradient (anomaly > SOH > RUL) is also instructive. Anomaly
+detection just needs to separate two distributions; SOH needs continuous
+calibration; RUL needs to extrapolate from current state to a future
+threshold. As the question gets harder, more data and more sophisticated
+features matter more — the same architecture (small dense MLP/AE) suffices
+for the inference-side architecture.
+
 ## 6. Recommended next experiments
 
 In rough order of educational value and effort:

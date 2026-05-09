@@ -208,6 +208,10 @@ Bundled apps:
 - **`apps/ai_bms_soh/`** — Battery **SOH regression** on the same NASA
   data. Outputs predicted capacity in Ah (not just anomaly yes/no). MAE
   ~0.11 Ah on the holdout cell. ~105 µs / inference.
+- **`apps/ai_bms_rul/`** — Battery **RUL prediction** (cycles remaining
+  until EOL). Same NASA data, prognostic problem. MAE ~12 cycles on
+  the holdout cell. ~140 µs / inference. Together with ai_bms and
+  ai_bms_soh, three complementary views of the same data.
 
 To add a new app, copy an existing one and rename. See `apps/README.md` for
 the convention.

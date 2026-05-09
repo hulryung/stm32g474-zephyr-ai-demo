@@ -65,6 +65,9 @@ Per-app debug overlays go in `apps/<app_name>/debug.conf` instead.
 | `ai_bms_soh`     | Battery SOH (state-of-health) **regression** on the same  |
 |                  | NASA data. Predicts capacity in Ah (not anomaly score).   |
 |                  | MAE ~0.11 Ah on holdout cell. ~105 µs / inference.        |
+| `ai_bms_rul`     | Battery **RUL prediction** — cycles remaining until EOL.  |
+|                  | Same NASA data, prognostic problem. MAE ~12 cycles on     |
+|                  | holdout. ~140 µs. The third complementary BMS view.       |
 
 ## Why not just modify `samples/basic/blinky`?
 
