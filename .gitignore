@@ -8,8 +8,9 @@
 # west workspace metadata (regenerable via `west init -l zephyr`)
 /.west/
 
-# Python venv
+# Python venvs (west .venv + ML training .venv-ml)
 /.venv/
+/.venv-ml/
 
 # Build output
 /build/
@@ -19,6 +20,13 @@ build/
 .DS_Store
 *.swp
 *.swo
+
+# Python
+__pycache__/
+*.pyc
+
+# Generated training artifacts (model.cpp is the artifact we ship)
+apps/*/train/model.tflite
 
 # Claude memory (kept outside this repo)
 /.claude/

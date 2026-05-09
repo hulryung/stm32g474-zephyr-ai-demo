@@ -197,6 +197,10 @@ Bundled apps:
 - **`apps/ai_sine/`** — TensorFlow Lite Micro on Cortex-M4. Int8-quantized
   MLP approximating `sin(x)`. Measured ~46 µs / inference @ 170 MHz with
   CMSIS-NN. See `docs/ai-on-g474re.md` for the full feasibility report.
+- **`apps/ai_anomaly/`** — Autoencoder-based anomaly detection on a
+  synthetic periodic signal. Trained from scratch in `train/train.py`;
+  unsupervised pattern. Inject faults via shell, score spikes 20–200×.
+  ~130 µs / inference.
 
 To add a new app, copy an existing one and rename. See `apps/README.md` for
 the convention.

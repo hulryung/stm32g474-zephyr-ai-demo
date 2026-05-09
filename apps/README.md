@@ -54,6 +54,10 @@ Per-app debug overlays go in `apps/<app_name>/debug.conf` instead.
 |                  | ~46 µs / inference @ 170 MHz. Demonstrates TinyML on M4   |
 |                  | (no NPU). Requires the optional west group — see          |
 |                  | `apps/ai_sine/README.md` and `docs/ai-on-g474re.md`.      |
+| `ai_anomaly`     | Autoencoder-based anomaly detection on a synthetic signal.|
+|                  | Demonstrates the unsupervised TinyML pattern. Inject      |
+|                  | faults via shell, watch reconstruction-error score spike  |
+|                  | 20–200×. ~130 µs / inference. See `apps/ai_anomaly/README.md`. |
 
 ## Why not just modify `samples/basic/blinky`?
 
