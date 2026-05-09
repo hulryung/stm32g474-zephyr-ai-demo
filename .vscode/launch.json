@@ -137,6 +137,33 @@
       "showDevDebugOutput": "none"
     },
     {
+      "name": "Cortex-Debug: ai_bms (debug build)",
+      "type": "cortex-debug",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "executable": "${workspaceFolder}/build/ai_bms/zephyr/zephyr.elf",
+      "servertype": "openocd",
+      "serverpath": "/Users/dkkang/zephyr-sdk-1.0.1/hosttools/usr/bin/openocd",
+      "armToolchainPath": "/Users/dkkang/zephyr-sdk-1.0.1/gnu/arm-zephyr-eabi/bin",
+      "gdbPath": "/Users/dkkang/zephyr-sdk-1.0.1/gnu/arm-zephyr-eabi/bin/arm-zephyr-eabi-gdb",
+      "configFiles": [
+        "interface/stlink.cfg",
+        "target/stm32g4x.cfg"
+      ],
+      "searchDir": [
+        "/Users/dkkang/zephyr-sdk-1.0.1/hosttools/opt/openocd/share/openocd/scripts"
+      ],
+      "preLaunchTask": "Zephyr: Debug build (ai_bms, -Og)",
+      "preLaunchCommands": [
+        "set mem inaccessible-by-default off"
+      ],
+      "postLaunchCommands": [
+        "monitor reset halt"
+      ],
+      "runToEntryPoint": "main",
+      "showDevDebugOutput": "none"
+    },
+    {
       "name": "Cortex-Debug: blinky (attach, no flash)",
       "type": "cortex-debug",
       "request": "attach",

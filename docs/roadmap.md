@@ -20,6 +20,8 @@ priority, not strict dependency.
 |-----|----------------------|--------|
 | `apps/shell_monitor` | UART shell, custom shell command tree, system monitoring | 🟢 |
 | `apps/ai_sine` | TFLM hello-world: int8 MLP regression, ~46 µs/inference | 🟢 |
+| `apps/ai_anomaly` | Autoencoder anomaly detection on synthetic signal, ~130 µs | 🟢 |
+| `apps/ai_bms` | AE on NASA PCoE battery cycle data, generalizes across cells, ~157 µs | 🟢 |
 
 ---
 
@@ -29,7 +31,7 @@ Goal: cover the 4 fundamental ML patterns at this scale — **regression**,
 **anomaly detection**, **classification (CNN)**, **sensor-driven
 classification**. We have regression. The rest:
 
-### 🔵 `apps/ai_anomaly` — autoencoder anomaly detection
+### 🟢 ~~`apps/ai_anomaly` — autoencoder anomaly detection~~ (shipped)
 
 Why: most "real" TinyML use cases on motor-control / industrial MCUs are
 anomaly detection on vibration, current, or audio. Educationally, this fills
@@ -49,7 +51,7 @@ sample). Inference code follows the `ai_sine` pattern.
 
 Educational value: ⭐⭐⭐⭐ (most "real" feeling demo)
 
-### ⚪ `apps/ai_bms` — battery management anomaly detection
+### 🟢 ~~`apps/ai_bms` — battery management anomaly detection~~ (shipped)
 
 Why: STM32G4 is widely used in real BMS designs (EV/ESS/power tools) — its
 multi-channel ADCs, internal op-amps, HRTIM, and FDCAN are why. Autoencoder

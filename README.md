@@ -201,6 +201,10 @@ Bundled apps:
   synthetic periodic signal. Trained from scratch in `train/train.py`;
   unsupervised pattern. Inject faults via shell, score spikes 20–200×.
   ~130 µs / inference.
+- **`apps/ai_bms/`** — Battery-cycle anomaly detection trained on
+  **real** NASA PCoE Battery Dataset cells (B0005/6/7) and tested on a
+  held-out cell (B0018) the model never saw. Flags aged cycles 7–9×
+  higher than healthy. ~157 µs / inference.
 
 To add a new app, copy an existing one and rename. See `apps/README.md` for
 the convention.

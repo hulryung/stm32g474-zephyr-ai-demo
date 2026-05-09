@@ -215,6 +215,62 @@
       "problemMatcher": []
     },
     {
+      "label": "Zephyr: Build (ai_bms)",
+      "type": "shell",
+      "command": "west",
+      "args": [
+        "build", "-p", "auto",
+        "-b", "nucleo_g474re",
+        "${workspaceFolder}/apps/ai_bms",
+        "-d", "${workspaceFolder}/build/ai_bms"
+      ],
+      "group": "build",
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "Zephyr: Debug build (ai_bms, -Og)",
+      "type": "shell",
+      "command": "west",
+      "args": [
+        "build", "-p", "always",
+        "-b", "nucleo_g474re",
+        "${workspaceFolder}/apps/ai_bms",
+        "-d", "${workspaceFolder}/build/ai_bms",
+        "--",
+        "-DEXTRA_CONF_FILE=${workspaceFolder}/debug.conf"
+      ],
+      "group": "build",
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "Zephyr: Flash (ai_bms / openocd)",
+      "type": "shell",
+      "command": "west",
+      "args": [
+        "flash", "-r", "openocd",
+        "-d", "${workspaceFolder}/build/ai_bms"
+      ],
+      "dependsOn": "Zephyr: Build (ai_bms)",
+      "problemMatcher": []
+    },
+    {
+      "label": "Zephyr: Train ai_bms model",
+      "type": "shell",
+      "command": "${workspaceFolder}/.venv-ml/bin/python",
+      "args": ["${workspaceFolder}/apps/ai_bms/train/train.py"],
+      "options": {
+        "cwd": "${workspaceFolder}/apps/ai_bms/train"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Zephyr: Clean ai_bms",
+      "type": "shell",
+      "command": "rm",
+      "args": ["-rf", "${workspaceFolder}/build/ai_bms"],
+      "problemMatcher": []
+    },
+    {
       "label": "Zephyr: Clean ai_anomaly",
       "type": "shell",
       "command": "rm",

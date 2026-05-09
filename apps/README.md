@@ -58,6 +58,10 @@ Per-app debug overlays go in `apps/<app_name>/debug.conf` instead.
 |                  | Demonstrates the unsupervised TinyML pattern. Inject      |
 |                  | faults via shell, watch reconstruction-error score spike  |
 |                  | 20–200×. ~130 µs / inference. See `apps/ai_anomaly/README.md`. |
+| `ai_bms`         | Battery-cycle anomaly detection trained on the NASA PCoE  |
+|                  | Battery Dataset. AE generalizes to a held-out cell        |
+|                  | (B0018) it never saw — flags aged cycles 7–9× higher than |
+|                  | healthy. Real-data version of `ai_anomaly`. ~157 µs.      |
 
 ## Why not just modify `samples/basic/blinky`?
 

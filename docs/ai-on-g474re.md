@@ -184,6 +184,53 @@ rarely the bottleneck up to a few hundred KB.
 
 ---
 
+## 5b. Update — autoencoder demos (2026-05-09)
+
+Two further apps shipped after the initial ai_sine measurement:
+
+### `apps/ai_anomaly` — synthetic-signal autoencoder
+
+| Metric | Value |
+|--------|-------|
+| Model size | 7.5 KB int8 |
+| FLASH used | 125 KB (24 %) |
+| RAM used | 25 KB (19 %) |
+| Inference | **130 µs / iter** at 170 MHz |
+| Throughput | ~7,650 inf/sec |
+| Normal score (avg) | 0.0012 |
+| Pulse-injection score | 0.024 (**20×**) |
+| Drift-injection score | 0.258 (**215×**) |
+
+Confirmed that the unsupervised AE pattern works on the M4 with strong
+separation between normal and corrupted inputs.
+
+### `apps/ai_bms` — real battery data, NASA PCoE
+
+| Metric | Value |
+|--------|-------|
+| Model size | 8.9 KB int8 |
+| FLASH used | 122 KB (23 %) |
+| RAM used | 23 KB (17 %) |
+| Inference | **157 µs / iter** at 170 MHz |
+| Throughput | ~6,400 inf/sec |
+| Trained on | B0005, B0006, B0007 healthy discharge cycles |
+| Tested on | B0018 — a held-out cell never seen during training |
+| Early cycle score (1.855 Ah) | 0.0030 |
+| Mid cycle score (1.522 Ah) | 0.0197 (**~7×**) |
+| Aged cycle score (1.341 Ah) | 0.0262 (**~9×**) |
+
+This is the most consequential result so far. The autoencoder, trained
+only on healthy cycles from three cells, correctly identifies degradation
+in a fourth cell it has never seen. That confirms it learned the *generic
+shape* of a healthy Li-ion discharge curve rather than memorizing any one
+cell's behavior — which is the whole point of an AE-based detector for
+BMS.
+
+The strong-but-not-extreme separation (7–9×, vs 215× for synthetic drift)
+is realistic: real degradation is a subtle multivariate trend, not a
+yes/no fault. The score crosses the (advisory) threshold cleanly while
+leaving headroom for tuning.
+
 ## 6. Recommended next experiments
 
 In rough order of educational value and effort:
