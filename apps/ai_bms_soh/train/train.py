@@ -48,7 +48,7 @@ V_MIN, V_MAX = 2.4, 4.3
 CAP_MIN, CAP_MAX = 1.0, 2.0
 
 HERE       = pathlib.Path(__file__).parent
-DATA_DIR   = HERE.parent.parent / "ai_bms" / "train" / "data" / "5. Battery Data Set"
+DATA_DIR   = HERE.parent.parent.parent / "datasets" / "nasa-pcoe"
 TFLITE_OUT = HERE / "model.tflite"
 CPP_OUT    = HERE.parent / "src" / "model.cpp"
 HPP_OUT    = HERE.parent / "src" / "model.hpp"

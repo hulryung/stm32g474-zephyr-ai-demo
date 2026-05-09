@@ -43,7 +43,7 @@ BATCH                   = 32
 SEED                    = 42
 
 HERE       = pathlib.Path(__file__).parent
-DATA_DIR   = HERE / "data" / "5. Battery Data Set"
+DATA_DIR   = HERE.parent.parent.parent / "datasets" / "nasa-pcoe"
 TFLITE_OUT = HERE / "model.tflite"
 CPP_OUT    = HERE.parent / "src" / "model.cpp"
 HPP_OUT    = HERE.parent / "src" / "model.hpp"

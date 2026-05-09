@@ -43,7 +43,7 @@ V_MIN, V_MAX  = 2.4, 4.3
 RUL_MAX       = 150          # normalize RUL to roughly [0, 1] then to [-1, +1]
 
 HERE       = pathlib.Path(__file__).parent
-DATA_DIR   = HERE.parent.parent / "ai_bms" / "train" / "data" / "5. Battery Data Set"
+DATA_DIR   = HERE.parent.parent.parent / "datasets" / "nasa-pcoe"
 TFLITE_OUT = HERE / "model.tflite"
 CPP_OUT    = HERE.parent / "src" / "model.cpp"
 HPP_OUT    = HERE.parent / "src" / "model.hpp"

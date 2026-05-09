@@ -28,8 +28,12 @@ __pycache__/
 # Generated training artifacts (model.cpp is the artifact we ship)
 apps/*/train/model.tflite
 
-# Raw datasets — too large to commit; each developer downloads their own
+# Raw datasets — too large to commit; each developer downloads their own.
+# datasets/README.md has reproduce instructions; datasets/*/ is gitignored
+# but datasets/README.md itself stays tracked.
 apps/*/train/data/
+datasets/*/
+!datasets/README.md
 
 # Claude memory (kept outside this repo)
 /.claude/
