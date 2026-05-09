@@ -1,0 +1,145 @@
+# ai_bms_soh
+
+Battery **State of Health (SOH) regression** on Cortex-M4. Same data as
+`ai_bms` (NASA PCoE, B0005-B0007 train, B0018 holdout) but a fundamentally
+different ML problem: instead of "is this cycle anomalous yes/no", we ask
+**"what is the actual capacity in Ah?"**
+
+This is the kind of estimator a real BMS uses for SOH/SOC display, range
+prediction, and warranty-based maintenance scheduling.
+
+## Measured on this board (B0018, holdout cell)
+
+| Cycle | True capacity | Predicted | Error          |
+|-------|---------------|-----------|----------------|
+| early | 1.855 Ah      | 1.794 Ah  | -3.3 %         |
+| mid   | 1.522 Ah      | 1.600 Ah  | +5.1 %         |
+| aged  | 1.341 Ah      | 1.529 Ah  | +14.0 %        |
+
+MAE on holdout = **0.109 Ah (~5–6 % of nominal capacity)**.
+Inference: **105 µs / cycle**, ~9,500 inferences/sec.
+
+### Honest assessment
+
+This is a deliberate-limit demonstration, not a production-grade SOH
+estimator. The errors above are dominated by:
+
+- **Small training set**: only ~500 cycles across 3 cells. Industry-grade
+  SOH estimators are trained on tens of thousands of cycles across
+  hundreds of cells.
+- **Mismatched discharge cutoffs**: NASA cells B0005-B0018 use
+  2.7V/2.5V/2.2V/2.5V cutoffs, so the *shape* of the discharge curve at
+  the end varies between cells regardless of actual SOH.
+- **Single-cycle input**: a real estimator looks at multiple consecutive
+  cycles + temperature + charge-side data, not one discharge curve in
+  isolation. Kalman filtering or particle filtering on top of a base
+  estimate is standard practice.
+
+The point of this demo is the **architecture**, not the accuracy: a tiny
+regressor in <120 KB FLASH delivers an SOH estimate in ~100 µs. Production
+implementations layer better data + better features on top of this same
+inference loop.
+
+## Build & flash
+
+Reuses the NASA PCoE data already present from `ai_bms`. Same one-time
+setup applies (`west config manifest.group-filter "+optional"` etc — see
+`apps/ai_bms/README.md`). Then:
+
+```bash
+.venv-ml/bin/python apps/ai_bms_soh/train/train.py
+west build -p auto -b nucleo_g474re apps/ai_bms_soh -d build/ai_bms_soh
+west flash -r openocd -d build/ai_bms_soh
+```
+
+VSCode tasks: **`Zephyr: Build (ai_bms_soh)`**, **`Zephyr: Train ai_bms_soh model`**,
+**`Zephyr: Flash (ai_bms_soh / openocd)`**.
+
+## Try it
+
+```
+g474> soh list
+name    cell    idx   true capacity
+early   B0018   0     1.8550 Ah
+mid     B0018   66    1.5223 Ah
+aged    B0018   131   1.3411 Ah
+
+g474> soh scan
+SOH estimation across all embedded cycles:
+early   true=1.8550 Ah  predicted=1.7936 Ah  error=-0.0614 Ah (3.3%)
+mid     true=1.5223 Ah  predicted=1.6000 Ah  error=+0.0777 Ah (5.1%)
+aged    true=1.3411 Ah  predicted=1.5290 Ah  error=+0.1879 Ah (14.0%)
+MAE: 0.1090 Ah (3 cycles)
+
+g474> soh bench 1000
+iterations : 1000
+avg        : 17791 cycles  (104.652 us)
+throughput : ~9555 inf/sec
+```
+
+## Commands
+
+| Command                       | What it does                            |
+|-------------------------------|-----------------------------------------|
+| `soh list`                    | List embedded cycles + true capacity    |
+| `soh info`                    | Model + arena info                      |
+| `soh estimate <cycle>`        | Predict capacity for one cycle          |
+| `soh scan`                    | Predict for all + print MAE             |
+| `soh bench [iterations]`      | Inference latency benchmark             |
+
+## How it differs from ai_bms
+
+`apps/ai_bms` and this app share the **same NASA dataset** but solve
+different problems with different model types:
+
+| Aspect             | `apps/ai_bms`                         | `apps/ai_bms_soh` (this)              |
+|--------------------|---------------------------------------|---------------------------------------|
+| ML problem         | Anomaly detection                     | Regression                            |
+| Supervision        | Unsupervised (only normal data)       | Supervised (curve → capacity label)   |
+| Output             | Score (~0..0.05)                      | Capacity in Ah (~1..2)                |
+| Architecture       | Autoencoder (32→16→8→4→8→16→32)       | MLP regressor (32→32→16→8→1)          |
+| Use case           | "Anything weird?"                     | "How much battery is left?"           |
+| Inference          | ~157 µs                               | ~105 µs                               |
+
+A production BMS will run **both**: SOH regression for the user-facing
+range estimate, anomaly detection for early-warning of unknown failure
+modes that the regression model can't see.
+
+## File layout
+
+```
+apps/ai_bms_soh/
+├── CMakeLists.txt
+├── prj.conf
+├── README.md
+├── train/
+│   └── train.py             # SOH regression — reads NASA data from ../ai_bms/train/data
+└── src/
+    ├── main.c
+    ├── cmd_soh.c            # `soh list|info|estimate|scan|bench` shell tree
+    ├── tflm_soh.h / .cpp    # C++ TFLM wrapper
+    ├── model.cpp / .hpp     # generated by train.py
+    └── cycles_db.cpp / .h   # generated — embedded sample cycles
+```
+
+## Memory footprint
+
+| Region | Used   | %     |
+|--------|--------|-------|
+| FLASH  | 118 KB | 22 %  |
+| RAM    | 23 KB  | 17 %  |
+
+## What to improve for real use
+
+1. **More cells, same cutoff**: train across 50+ cells of the same chemistry
+   and discharge protocol. Sources: CALCE LFP-CS2 series, Severson 124-cell
+   LFP, Sandia.
+2. **Richer features**: include charge-side curve, temperature, internal
+   resistance estimate. Multi-channel input.
+3. **Sequential inference**: feed the past N cycles' estimates through a
+   Kalman / EKF / particle filter to dampen single-cycle noise.
+4. **Cycle-counting reference**: every full discharge gives ground-truth
+   coulomb-counted capacity. Use it to slowly adapt the model online.
+
+The pattern in this app — train regressor offline, quantize, deploy — is
+the foundation for all the above.

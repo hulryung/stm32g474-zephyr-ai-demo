@@ -205,6 +205,9 @@ Bundled apps:
   **real** NASA PCoE Battery Dataset cells (B0005/6/7) and tested on a
   held-out cell (B0018) the model never saw. Flags aged cycles 7–9×
   higher than healthy. ~157 µs / inference.
+- **`apps/ai_bms_soh/`** — Battery **SOH regression** on the same NASA
+  data. Outputs predicted capacity in Ah (not just anomaly yes/no). MAE
+  ~0.11 Ah on the holdout cell. ~105 µs / inference.
 
 To add a new app, copy an existing one and rename. See `apps/README.md` for
 the convention.

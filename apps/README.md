@@ -62,6 +62,9 @@ Per-app debug overlays go in `apps/<app_name>/debug.conf` instead.
 |                  | Battery Dataset. AE generalizes to a held-out cell        |
 |                  | (B0018) it never saw — flags aged cycles 7–9× higher than |
 |                  | healthy. Real-data version of `ai_anomaly`. ~157 µs.      |
+| `ai_bms_soh`     | Battery SOH (state-of-health) **regression** on the same  |
+|                  | NASA data. Predicts capacity in Ah (not anomaly score).   |
+|                  | MAE ~0.11 Ah on holdout cell. ~105 µs / inference.        |
 
 ## Why not just modify `samples/basic/blinky`?
 
