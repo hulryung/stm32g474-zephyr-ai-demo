@@ -1,0 +1,68 @@
+Battery dataset smoke-test
+workspace: /Users/dkkang/dev/zephyr
+
+━━━ NASA PCoE — 4 cells, LCO, CC discharge ━━━
+  location              datasets/nasa-pcoe
+  cell files            B0005.mat, B0006.mat, B0007.mat, B0018.mat
+  EOL criterion         30% capacity fade (1.4 Ah of 2.0 Ah nominal)
+  B0005 cycles          168 discharge / cap [1.287..1.856] Ah
+  B0006 cycles          168 discharge / cap [1.154..2.035] Ah
+  B0007 cycles          168 discharge / cap [1.400..1.891] Ah
+  B0018 cycles          132 discharge / cap [1.341..1.855] Ah
+  ✓ loaded all 4 cells, capacity ranges sensible
+
+━━━ NASA Randomized — random-walk current profiles, LCO ━━━
+  location              datasets/nasa-randomized/11. Randomized Battery Usage Data Set
+  inner zips            7 cycling regimes
+    - 1                 425 MB
+    - 2                 114 MB
+    - 3                 134 MB
+    ...                 and 4 more
+  peek                  2. Battery_Uniform_Distribution_Discharge_Room_Temp_DataSet_2Post.zip
+    .mat files          4
+    top-level key       data
+    struct fields       step, procedure, description
+  ✓ can extract + load inner .mat files
+
+━━━ Oxford Battery Degradation — 8 cells, drive-cycle profile, LCO ━━━
+  location              datasets/oxford
+  main file size        253 MB
+  cells                 8 (Cell1 … Cell8)
+  Cell1 shape           (1, 1)
+  Cell1 dtype           object
+  ✓ loaded 8 cells, structured data accessible
+
+━━━ CALCE CS2 — LCO, prismatic, CC-CV charge / CC discharge ━━━
+  location              datasets/calce-cs2-lco
+  cells                 3 (CS2_33, CS2_34, CS2_35)
+    CS2_33              23 .xlsx + 0 .txt files
+    CS2_34              23 .xlsx + 0 .txt files
+    CS2_35              25 .xlsx + 0 .txt files
+  sample file           CS2_33_10_04_10.xlsx
+    sheets              Info, Channel_1-006
+  ✓ Excel parsing works
+
+━━━ CALCE CX2 — LFP, prismatic, CC-CV charge / CC discharge ━━━
+  location              datasets/calce-cx2-lfp
+  cells                 3 (CX2_33, CX2_34, CX2_35)
+    CX2_33              45 .xlsx + 3 .txt files
+    CX2_34              43 .xlsx + 0 .txt files
+    CX2_35              48 .xlsx + 0 .txt files
+  sample file           CX2_33_10_04_10.xlsx
+    sheets              Info, Channel_1-012
+  ✓ Excel parsing works
+
+━━━ Severson 124-cell LFP — manual download required ━━━
+  location              datasets/severson
+  status                empty (manual download from data.matr.io required)
+  see                   datasets/README.md → 'severson/' section
+
+━━━ SUMMARY ━━━
+  ✓ PASS  nasa-pcoe
+  ✓ PASS  nasa-randomized
+  ✓ PASS  oxford
+  ✓ PASS  calce-cs2-lco
+  ✓ PASS  calce-cx2-lfp
+  ⏸ SKIP  severson
+
+  total: 5 pass / 0 fail / 1 skipped
