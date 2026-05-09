@@ -29,6 +29,50 @@ Numbers reproducible — full live-board capture in
 
 ---
 
+## Watch them run
+
+Three short asciinema recordings of the live board, captured by driving
+the Zephyr shell over `tether` (multiplexing serial daemon). The GIFs
+below are auto-generated from the cast files in `docs/casts/`. Each
+playthrough corresponds to a real flash → run → measure cycle.
+
+### `ai_bms` — autoencoder catches degraded battery cycles on a held-out cell
+
+![ai_bms scan demo](docs/gifs/demo-ai-bms.gif)
+
+Three cycles from B0018 (the cell the AE has never seen):
+`early` (1.855 Ah, healthy) scores 0.003; `mid` and `aged` exceed the
+0.005 threshold and are flagged with `★ ANOMALY`. Score grows monotonically
+with cell age — `aged` cycles ~9× higher than healthy.
+
+> Cast: [`docs/casts/demo-ai-bms.cast`](docs/casts/demo-ai-bms.cast)
+> · Replay: `asciinema play docs/casts/demo-ai-bms.cast`
+
+### `ai_anomaly` — fault injection from the shell, score reacts immediately
+
+![ai_anomaly inject demo](docs/gifs/demo-ai-anomaly.gif)
+
+Baseline score is ~0.001 (normal periodic signal). Injecting a 3-sample
+**pulse** through the shell pushes the score 20× higher; a constant
+**drift** corrupts every sample and pushes it 200× higher. The same
+inference loop, just different input distribution.
+
+> Cast: [`docs/casts/demo-ai-anomaly.cast`](docs/casts/demo-ai-anomaly.cast)
+
+### `ai_bms_rul` — predicting cycles until end-of-life
+
+![ai_bms_rul demo](docs/gifs/demo-ai-bms-rul.gif)
+
+Same NASA data as `ai_bms`, different question: "how many cycles until
+the cell crosses below 1.5 Ah?" Notice the model is most accurate on the
+**aged** cycle (predicted 2 vs true 0 — within margin of error) where
+degradation is unmistakable, and least accurate on **early** cycles where
+the signal is subtle. Inference: 140 µs per cycle.
+
+> Cast: [`docs/casts/demo-ai-bms-rul.cast`](docs/casts/demo-ai-bms-rul.cast)
+
+---
+
 ## What this repo demonstrates
 
 1. **TinyML is real on no-NPU MCUs.** Cortex-M4 + DSP + FPU + CMSIS-NN
@@ -108,6 +152,7 @@ The dataset variety lets future demos isolate specific axes:
 | [`docs/ai-on-g474re.md`](docs/ai-on-g474re.md)        | TinyML feasibility report — hardware reality, framework choice, measured per-app latency / footprint, capacity for other model classes |
 | [`docs/experiment-results.md`](docs/experiment-results.md) | Live-board test report for the 3 BMS apps — full tether output for every command, cross-app comparison, caveats |
 | [`docs/dataset-exploration.md`](docs/dataset-exploration.md) | Smoke-test of all 5 datasets with asciinema recording — confirms each one parses + summarizes structure |
+| [`docs/casts/`](docs/casts/) + [`docs/gifs/`](docs/gifs/) | Asciinema casts + GIFs of the demo runs above (replayable in any terminal) |
 | [`docs/roadmap.md`](docs/roadmap.md)                  | Planned future apps — chemistry generalization, drive-cycle robustness, KWS, MNIST CNN, etc. |
 | [`apps/<name>/README.md`](apps/)                       | Per-app: how to build, train, flash, and use     |
 | [`datasets/README.md`](datasets/README.md)            | Per-dataset: source, format, citations, reproduce commands |
