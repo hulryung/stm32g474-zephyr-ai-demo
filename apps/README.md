@@ -68,6 +68,9 @@ Per-app debug overlays go in `apps/<app_name>/debug.conf` instead.
 | `ai_bms_rul`     | Battery **RUL prediction** — cycles remaining until EOL.  |
 |                  | Same NASA data, prognostic problem. MAE ~12 cycles on     |
 |                  | holdout. ~140 µs. The third complementary BMS view.       |
+| `ai_bms_soc`     | **Six SOC estimators side-by-side**: coulomb counting,    |
+|                  | OCV, EKF (production-grade), MLP, LSTM, Hybrid (EKF+MLP). |
+|                  | Honest comparison of classical vs TinyML on the same data.|
 
 ## Why not just modify `samples/basic/blinky`?
 

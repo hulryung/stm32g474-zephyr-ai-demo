@@ -22,6 +22,7 @@ three battery models run together.
 | `apps/ai_bms`          | "Is this cycle anomalous?"    | **157 µs**    | 7×–9× separation aged vs healthy |
 | `apps/ai_bms_soh`      | "What is the cell capacity?"  | **105 µs**    | MAE 0.109 Ah (~5.9 %) |
 | `apps/ai_bms_rul`      | "Cycles until end-of-life?"   | **140 µs**    | MAE 12 cycles |
+| `apps/ai_bms_soc`      | **6 SOC estimators side-by-side** (CC / OCV / EKF / MLP / LSTM / Hybrid) | 3-200 µs each | classical vs ML head-to-head, honest |
 | `apps/shell_monitor`   | (UART shell + system stats)   | —             | foundation for all the others |
 
 Numbers reproducible — full live-board capture in
@@ -58,6 +59,20 @@ Baseline score is ~0.001 (normal periodic signal). Injecting a 3-sample
 inference loop, just different input distribution.
 
 > Cast: [`docs/casts/demo-ai-anomaly.cast`](docs/casts/demo-ai-anomaly.cast)
+
+### `ai_bms_soc` — six SOC estimators side-by-side, classical vs ML
+
+![ai_bms_soc demo](docs/gifs/demo-ai-bms-soc.gif)
+
+Six different ways to answer "what's the cell's SOC right now": coulomb
+counting, OCV lookup, EKF (production-grade), MLP, LSTM, and a hybrid
+EKF+MLP. On a full-discharge window all three ML methods nail it (0 %
+error); EKF makes a 16 % error from capacity-fade mismatch. On a
+partial-discharge window with artificial padding, **MLP is the most
+robust** because it only looks at the last sample. Honest comparison
+of classical and ML approaches on the same data — no winner takes all.
+
+> Cast: [`docs/casts/demo-ai-bms-soc.cast`](docs/casts/demo-ai-bms-soc.cast)
 
 ### `ai_bms_rul` — predicting cycles until end-of-life
 

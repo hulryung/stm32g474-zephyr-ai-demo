@@ -24,6 +24,7 @@ priority, not strict dependency.
 | `apps/ai_bms` | AE on NASA PCoE battery cycle data, generalizes across cells, ~157 µs | 🟢 |
 | `apps/ai_bms_soh` | SOH regression on same NASA data, MAE 0.11 Ah, ~105 µs | 🟢 |
 | `apps/ai_bms_rul` | RUL prognostic on same NASA data, MAE 12 cycles, ~140 µs | 🟢 |
+| `apps/ai_bms_soc` | Six SOC estimators (CC/OCV/EKF/MLP/LSTM/Hybrid) head-to-head | 🟢 |
 
 ---
 
