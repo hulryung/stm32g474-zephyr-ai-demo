@@ -405,6 +405,82 @@
       "problemMatcher": []
     },
     {
+      "label": "Zephyr: Build (ai_bms_dual_ekf)",
+      "type": "shell",
+      "command": "west",
+      "args": ["build", "-p", "auto", "-b", "nucleo_g474re",
+               "${workspaceFolder}/apps/ai_bms_dual_ekf",
+               "-d", "${workspaceFolder}/build/ai_bms_dual_ekf"],
+      "group": "build",
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "Zephyr: Flash (ai_bms_dual_ekf / openocd)",
+      "type": "shell",
+      "command": "west",
+      "args": ["flash", "-r", "openocd",
+               "-d", "${workspaceFolder}/build/ai_bms_dual_ekf"],
+      "dependsOn": "Zephyr: Build (ai_bms_dual_ekf)",
+      "problemMatcher": []
+    },
+    {
+      "label": "Zephyr: Build (ai_bms_persistence)",
+      "type": "shell",
+      "command": "west",
+      "args": ["build", "-p", "auto", "-b", "nucleo_g474re",
+               "${workspaceFolder}/apps/ai_bms_persistence",
+               "-d", "${workspaceFolder}/build/ai_bms_persistence"],
+      "group": "build",
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "Zephyr: Flash (ai_bms_persistence / openocd)",
+      "type": "shell",
+      "command": "west",
+      "args": ["flash", "-r", "openocd",
+               "-d", "${workspaceFolder}/build/ai_bms_persistence"],
+      "dependsOn": "Zephyr: Build (ai_bms_persistence)",
+      "problemMatcher": []
+    },
+    {
+      "label": "Zephyr: Build (ai_bms_safety)",
+      "type": "shell",
+      "command": "west",
+      "args": ["build", "-p", "auto", "-b", "nucleo_g474re",
+               "${workspaceFolder}/apps/ai_bms_safety",
+               "-d", "${workspaceFolder}/build/ai_bms_safety"],
+      "group": "build",
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "Zephyr: Flash (ai_bms_safety / openocd)",
+      "type": "shell",
+      "command": "west",
+      "args": ["flash", "-r", "openocd",
+               "-d", "${workspaceFolder}/build/ai_bms_safety"],
+      "dependsOn": "Zephyr: Build (ai_bms_safety)",
+      "problemMatcher": []
+    },
+    {
+      "label": "Zephyr: Build (ai_bms_live)",
+      "type": "shell",
+      "command": "west",
+      "args": ["build", "-p", "auto", "-b", "nucleo_g474re",
+               "${workspaceFolder}/apps/ai_bms_live",
+               "-d", "${workspaceFolder}/build/ai_bms_live"],
+      "group": "build",
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "Zephyr: Flash (ai_bms_live / openocd)",
+      "type": "shell",
+      "command": "west",
+      "args": ["flash", "-r", "openocd",
+               "-d", "${workspaceFolder}/build/ai_bms_live"],
+      "dependsOn": "Zephyr: Build (ai_bms_live)",
+      "problemMatcher": []
+    },
+    {
       "label": "Zephyr: Clean ai_bms_soc",
       "type": "shell",
       "command": "rm",

@@ -71,6 +71,18 @@ Per-app debug overlays go in `apps/<app_name>/debug.conf` instead.
 | `ai_bms_soc`     | **Six SOC estimators side-by-side**: coulomb counting,    |
 |                  | OCV, EKF (production-grade), MLP, LSTM, Hybrid (EKF+MLP). |
 |                  | Honest comparison of classical vs TinyML on the same data.|
+| `ai_bms_dual_ekf`| **Dual EKF — SOC + capacity co-estimation.** Tracks Q     |
+|                  | from 1.85 → 1.27 Ah over NASA B0005's 168 cycles. The     |
+|                  | production capacity-tracking pattern.                     |
+| `ai_bms_persistence` | **NVS state save/restore + OCV recalibration.** Real |
+|                  | flash storage. Demonstrates the rest-time policy that     |
+|                  | every production BMS needs at boot.                       |
+| `ai_bms_safety`  | **Layer 1 / Layer 2 thread separation.** Hard-rule        |
+|                  | safety thread (priority 2, 100 Hz) + ML advisory thread   |
+|                  | (priority 10, 10 Hz). Six injectable scenarios.           |
+| `ai_bms_live`    | **DAC→ADC stream pipeline.** PA4↔PA0 jumper, 1 kHz        |
+|                  | sampler thread + ring buffer + 10 Hz SOC worker. The      |
+|                  | shape a real BMS uses for live data acquisition.          |
 
 ## Why not just modify `samples/basic/blinky`?
 

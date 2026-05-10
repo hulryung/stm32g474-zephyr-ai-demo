@@ -25,6 +25,10 @@ priority, not strict dependency.
 | `apps/ai_bms_soh` | SOH regression on same NASA data, MAE 0.11 Ah, ~105 µs | 🟢 |
 | `apps/ai_bms_rul` | RUL prognostic on same NASA data, MAE 12 cycles, ~140 µs | 🟢 |
 | `apps/ai_bms_soc` | Six SOC estimators (CC/OCV/EKF/MLP/LSTM/Hybrid) head-to-head | 🟢 |
+| `apps/ai_bms_dual_ekf` | Dual EKF capacity co-estimation, NASA B0005 84-cycle replay | 🟢 |
+| `apps/ai_bms_persistence` | NVS state save/restore + OCV recalibration policy | 🟢 |
+| `apps/ai_bms_safety` | Layer 1/2 thread separation, 6 scenarios | 🟢 |
+| `apps/ai_bms_live` | DAC→ADC live stream pipeline | 🟢 |
 
 ---
 

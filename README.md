@@ -23,6 +23,10 @@ three battery models run together.
 | `apps/ai_bms_soh`      | "What is the cell capacity?"  | **105 µs**    | MAE 0.109 Ah (~5.9 %) |
 | `apps/ai_bms_rul`      | "Cycles until end-of-life?"   | **140 µs**    | MAE 12 cycles |
 | `apps/ai_bms_soc`      | **6 SOC estimators side-by-side** (CC / OCV / EKF / MLP / LSTM / Hybrid) | 3-200 µs each | classical vs ML head-to-head, honest |
+| `apps/ai_bms_dual_ekf` | **Dual EKF — SOC + Q co-estimation** | (84 cycles, ~ms each) | tracks 1.85 → 1.27 Ah on NASA B0005 |
+| `apps/ai_bms_persistence` | **NVS save/restore + OCV recalibration** | µs | real flash storage + rest-time policy |
+| `apps/ai_bms_safety`   | **Layer 1/2 thread separation** | 100Hz/10Hz | hard rule + ML advisory, 6 scenarios |
+| `apps/ai_bms_live`     | **DAC→ADC stream pipeline** | 1 kHz sampler | jumper PA4↔PA0, ring buffer + worker |
 | `apps/shell_monitor`   | (UART shell + system stats)   | —             | foundation for all the others |
 
 Numbers reproducible — full live-board capture in
@@ -59,6 +63,37 @@ Baseline score is ~0.001 (normal periodic signal). Injecting a 3-sample
 inference loop, just different input distribution.
 
 > Cast: [`docs/casts/demo-ai-anomaly.cast`](docs/casts/demo-ai-anomaly.cast)
+
+### `ai_bms_dual_ekf` — capacity tracking across cell life (production pattern)
+
+![ai_bms_dual_ekf demo](docs/gifs/demo-ai-bms-dual-ekf.gif)
+
+Dual EKF — fast SOC estimator + slow capacity (Q) estimator. Replays
+NASA B0005's 168 discharge cycles in order; the slow EKF tracks capacity
+fade from 1.85 Ah down to 1.27 Ah, ending at SOH = 68.6 %. Final error
+just 39 mAh. **The pattern every production BMS uses to keep SOC
+calibrated as the cell ages.**
+
+### `ai_bms_persistence` — NVS save/restore + OCV recalibration policy
+
+![ai_bms_persistence demo](docs/gifs/demo-ai-bms-persistence.gif)
+
+Real flash storage via Zephyr's settings subsystem. Demonstrates the
+**rest-time policy** that decides whether to trust saved SOC after
+boot: short rest → use saved value; long rest → blend with OCV reading
+(0.3 saved + 0.7 OCV). Versioned schema, factory-reset path, drift
+detector all included.
+
+### `ai_bms_safety` — Layer 1 hard rules + Layer 2 ML advisory thread
+
+![ai_bms_safety demo](docs/gifs/demo-ai-bms-safety.gif)
+
+Two Zephyr threads. **Safety thread** runs at 100 Hz priority 2,
+evaluates hard rules (OV/UV/OC/OT) only — would open the contactor.
+**ML advisory thread** runs at 10 Hz priority 10, computes anomaly score
++ imbalance / thermal trend warnings — **never** touches the contactor.
+Six injectable scenarios. The architecture every UL/IEC-certified BMS
+has to use.
 
 ### `ai_bms_soc` — six SOC estimators side-by-side, classical vs ML
 
