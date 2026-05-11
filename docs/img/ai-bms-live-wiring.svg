@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 560" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="12">
+  <style>
+    .board-fill { fill: #0e8f4e; }
+    .board-outline { fill: none; stroke: #052e1a; stroke-width: 1.5; }
+    .pcb-text { fill: #ffffff; }
+    .pcb-text-dim { fill: #cfead8; }
+    .conn { fill: #1a1a1a; stroke: #000; stroke-width: 0.6; }
+    .pin-pad { fill: #d4d4d4; stroke: #000; stroke-width: 0.5; }
+    .pin-label { fill: #ffffff; font-size: 9px; }
+    .pin-hl { fill: #ffd84a; stroke: #b27c00; stroke-width: 1.2; }
+    .pin-hl-text { fill: #1a1100; font-weight: bold; font-size: 10px; }
+    .mcu-fill { fill: #1a1a1a; stroke: #000; stroke-width: 1; }
+    .mcu-text { fill: #ffffff; font-size: 10px; }
+    .stlink-fill { fill: #0a4d8f; stroke: #042e57; }
+    .usb-fill { fill: #888; stroke: #333; }
+    .jumper { fill: none; stroke: #e74c3c; stroke-width: 3.5; stroke-linecap: round; }
+    .callout { fill: #1a1a1a; }
+    .callout-strong { fill: #b03030; font-weight: bold; }
+    .caption { fill: #1a1a1a; font-size: 11px; }
+  </style>
+
+  <!-- title -->
+  <text x="360" y="22" text-anchor="middle" fill="#1a1a1a" font-size="15" font-weight="bold">
+    ai_bms_live wiring — Nucleo-G474RE jumper PA4 (DAC1_OUT1) ↔ PA0 (ADC1_IN1)
+  </text>
+  <text x="360" y="40" text-anchor="middle" class="caption">
+    Both pins live on the CN8 Arduino-analog header. Bridge A0 ↔ A2 with one short jumper wire.
+  </text>
+
+  <!-- PCB outline -->
+  <rect x="80" y="65" width="560" height="430" rx="14" ry="14" class="board-fill"/>
+  <rect x="80" y="65" width="560" height="430" rx="14" ry="14" class="board-outline"/>
+
+  <!-- silkscreen label -->
+  <text x="360" y="90" text-anchor="middle" class="pcb-text" font-size="13" font-weight="bold">NUCLEO-G474RE</text>
+  <text x="360" y="106" text-anchor="middle" class="pcb-text-dim" font-size="10">STM32G474RE · top view · USB at top</text>
+
+  <!-- ST-LINK USB connector (top center) -->
+  <rect x="320" y="55" width="80" height="20" class="usb-fill"/>
+  <text x="360" y="69" text-anchor="middle" class="pcb-text" font-size="9">ST-Link · USB</text>
+
+  <!-- STM32 MCU (center) -->
+  <rect x="290" y="230" width="140" height="100" class="mcu-fill"/>
+  <text x="360" y="275" text-anchor="middle" class="mcu-text">STM32</text>
+  <text x="360" y="290" text-anchor="middle" class="mcu-text">G474RET6</text>
+  <text x="360" y="307" text-anchor="middle" class="mcu-text" font-size="8">LQFP-64</text>
+
+  <!-- CN7 morpho (left outer) -->
+  <rect x="98" y="125" width="20" height="340" class="conn"/>
+  <text x="108" y="140" text-anchor="middle" class="pin-label">CN7</text>
+  <text x="108" y="155" text-anchor="middle" class="pin-label" font-size="7">morpho</text>
+  <text x="108" y="165" text-anchor="middle" class="pin-label" font-size="7">38-pin</text>
+
+  <!-- CN10 morpho (right outer) -->
+  <rect x="602" y="125" width="20" height="340" class="conn"/>
+  <text x="612" y="140" text-anchor="middle" class="pin-label">CN10</text>
+  <text x="612" y="155" text-anchor="middle" class="pin-label" font-size="7">morpho</text>
+  <text x="612" y="165" text-anchor="middle" class="pin-label" font-size="7">38-pin</text>
+
+  <!-- Right-inner Arduino headers — CN5 (top) + CN6 (bottom) -->
+  <rect x="500" y="160" width="65" height="20" class="conn"/>
+  <text x="532" y="173" text-anchor="middle" class="pin-label">CN5  D8..D15</text>
+
+  <rect x="500" y="375" width="65" height="20" class="conn"/>
+  <text x="532" y="388" text-anchor="middle" class="pin-label">CN6  power</text>
+
+  <!-- Left-inner Arduino headers — CN9 (top) + CN8 (bottom, the one we want) -->
+  <rect x="155" y="160" width="65" height="20" class="conn"/>
+  <text x="187" y="173" text-anchor="middle" class="pin-label">CN9  D0..D7</text>
+
+  <!-- CN8 — highlight + show individual pins -->
+  <rect x="155" y="375" width="90" height="22" class="conn"/>
+  <text x="200" y="389" text-anchor="middle" class="pin-label" font-weight="bold">CN8  A0..A5</text>
+
+  <!-- 6 pins of CN8 — drawn just BELOW the body for clarity. -->
+  <g>
+    <!-- pin 1 (A0 = PA0) — highlighted -->
+    <circle cx="166" cy="408" r="6.5" class="pin-hl"/>
+    <text x="166" y="412" text-anchor="middle" class="pin-hl-text">A0</text>
+
+    <circle cx="180" cy="408" r="5" class="pin-pad"/>
+    <text x="180" y="421" text-anchor="middle" class="callout" font-size="8">A1</text>
+
+    <!-- pin 3 (A2 = PA4) — highlighted -->
+    <circle cx="194" cy="408" r="6.5" class="pin-hl"/>
+    <text x="194" y="412" text-anchor="middle" class="pin-hl-text">A2</text>
+
+    <circle cx="208" cy="408" r="5" class="pin-pad"/>
+    <text x="208" y="421" text-anchor="middle" class="callout" font-size="8">A3</text>
+
+    <circle cx="222" cy="408" r="5" class="pin-pad"/>
+    <text x="222" y="421" text-anchor="middle" class="callout" font-size="8">A4</text>
+
+    <circle cx="236" cy="408" r="5" class="pin-pad"/>
+    <text x="236" y="421" text-anchor="middle" class="callout" font-size="8">A5</text>
+  </g>
+
+  <!-- Jumper wire as a smooth arc above the two highlighted pins -->
+  <path d="M 166 405 C 166 360, 194 360, 194 405" class="jumper"/>
+
+  <!-- callouts -->
+  <text x="166" y="447" text-anchor="middle" class="callout-strong" font-size="11">A0 = PA0</text>
+  <text x="166" y="460" text-anchor="middle" class="callout" font-size="9">ADC1_IN1</text>
+
+  <text x="194" y="447" text-anchor="middle" class="callout-strong" font-size="11">A2 = PA4</text>
+  <text x="194" y="460" text-anchor="middle" class="callout" font-size="9">DAC1_OUT1</text>
+
+  <!-- arrow connecting the pin block to the legend on the right -->
+  <line x1="245" y1="408" x2="350" y2="408" stroke="#1a1a1a" stroke-width="1" stroke-dasharray="3,3"/>
+  <polygon points="350,403 360,408 350,413" fill="#1a1a1a"/>
+
+  <!-- Wiring details box on right -->
+  <g>
+    <rect x="370" y="370" width="260" height="105" fill="#fafafa" stroke="#333" stroke-width="1"/>
+    <text x="500" y="388" text-anchor="middle" class="caption" font-weight="bold">Wiring</text>
+    <text x="380" y="406" class="caption">①  Power down board (unplug USB)</text>
+    <text x="380" y="421" class="caption">②  Insert one M-F or F-F jumper</text>
+    <text x="380" y="436" class="caption">    between CN8 pin 1 (A0) and</text>
+    <text x="380" y="451" class="caption">    CN8 pin 3 (A2)</text>
+    <text x="380" y="467" class="caption">③  Re-plug USB · run `live loopback`</text>
+  </g>
+
+  <!-- User button + LED -->
+  <rect x="500" y="450" width="30" height="20" fill="#222" stroke="#000"/>
+  <text x="515" y="464" text-anchor="middle" class="pin-label" font-size="8">USER</text>
+  <circle cx="555" cy="460" r="6" fill="#69ff7a" stroke="#0a0"/>
+  <text x="555" y="478" text-anchor="middle" class="pin-label" font-size="8">LD2</text>
+
+  <!-- footer -->
+  <text x="360" y="525" text-anchor="middle" class="caption">
+    Pin map confirmed against zephyr/boards/st/nucleo_g474re/arduino_r3_connector.dtsi
+  </text>
+  <text x="360" y="542" text-anchor="middle" class="caption">
+    (Arduino A0 → gpioa 0, Arduino A2 → gpioa 4) and ST UM2505 Nucleo-64 user manual.
+  </text>
+</svg>

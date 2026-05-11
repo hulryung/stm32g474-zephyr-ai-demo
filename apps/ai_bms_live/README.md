@@ -27,15 +27,34 @@ build.
 
 ## Wiring
 
-**You need one jumper wire on the Nucleo header.**
+**One short jumper wire between two CN8 pins, two pins apart.**
+
+![PA4↔PA0 wiring diagram](../../docs/img/ai-bms-live-wiring.svg)
+
+PA0 and PA4 are both pulled out as **Arduino-analog pins on header
+CN8** — no need to go to the morpho headers at all:
+
+| Signal | STM32 pin | Arduino label | CN8 pin |
+|--------|-----------|---------------|---------|
+| ADC1_IN1 (input) | PA0 | A0 | pin 1 |
+| DAC1_OUT1 (output) | PA4 | A2 | pin 3 |
+
+One M-F or F-F jumper wire bridges them. They're 2 pins apart on the
+same header. (Verified against
+`zephyr/boards/st/nucleo_g474re/arduino_r3_connector.dtsi` —
+`ARDUINO_HEADER_R3_A0 → &gpioa 0` and `ARDUINO_HEADER_R3_A2 → &gpioa 4`.)
 
 ```
-   PA4 (DAC1_OUT1) ───────  PA0 (ADC1_IN1)
-   = CN7 pin 32              = CN8 pin 1 (Arduino A0)
+                CN8 (Arduino A0..A5 header)
+                ────────────────────────────
+                ●  ○  ●  ○  ○  ○
+                A0 A1 A2 A3 A4 A5
+                ↑     ↑
+                │     │
+                └──[jumper]──┘
+                PA0  PA4
+                ADC  DAC
 ```
-
-Both pins are pulled out to standard headers on the Nucleo-G474RE.
-Female-female jumper between A0 and CN7-32 is the simplest setup.
 
 After connecting, run `live loopback` to verify ADC reads ≈ DAC output
 across four test points.
