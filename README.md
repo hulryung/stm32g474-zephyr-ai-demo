@@ -95,6 +95,19 @@ evaluates hard rules (OV/UV/OC/OT) only — would open the contactor.
 Six injectable scenarios. The architecture every UL/IEC-certified BMS
 has to use.
 
+### `ai_bms_live` — DAC→ADC live sampling on the Nucleo
+
+The only demo in the repo that needs hardware wiring. One short jumper
+on the **CN8 header** (PA0 and PA4 are two pins apart there — Arduino
+A0 ↔ A2):
+
+![PA4↔PA0 wiring diagram](docs/img/ai-bms-live-wiring.svg)
+
+Then `live simulate sweep` drives the DAC, the 1 kHz sampler thread
+captures the loopback into a ring buffer, and the 10 Hz worker thread
+turns it into a toy SOC trace. The same shape a real BMS uses with an
+LTC6811 / BQ76952 instead of the DAC.
+
 ### `ai_bms_soc` — six SOC estimators side-by-side, classical vs ML
 
 ![ai_bms_soc demo](docs/gifs/demo-ai-bms-soc.gif)
